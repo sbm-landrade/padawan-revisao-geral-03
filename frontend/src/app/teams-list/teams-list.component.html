@@ -1,0 +1,25 @@
+<h2>Lista de Times</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>País</th>
+      <th>Técnico</th>
+      <th>Valor</th>
+      <th>Criado em</th>
+      <th>Atualizado em</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of teams">
+      <td>{{ team.id }}</td>
+      <td>{{ team.teamName }}</td>
+      <td>{{ team.country }}</td>
+      <td>{{ team.coachName }}</td>
+      <td>{{ team.teamValue | currency }}</td>
+      <td>{{ team.createdAt | date }}</td>
+      <td>{{ team.updatedAt | date }}</td>
+    </tr>
+  </tbody>
+</table>

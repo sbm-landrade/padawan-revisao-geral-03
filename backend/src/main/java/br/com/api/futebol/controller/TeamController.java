@@ -17,6 +17,7 @@ import java.util.Optional;
 	    @Autowired
 	    private TeamService teamService;
 	    //listar todos os times
+	    @CrossOrigin(origins = "http://localhost:4200")
 	    @GetMapping
 	    public List<Team> getAllTeams() {
 	        return teamService.getAllTeams();
