@@ -1,9 +1,12 @@
 package br.com.api.futebol.controller;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,13 +33,26 @@ public class TeamController {
 	// listar todos os times
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping
-	public ResponseEntity<List<Team>> getAllTeams(@RequestParam(value = "teamName", required = false) String teamName,
-			@RequestParam(value = "country", required = false) String country,
-			@RequestParam(value = "coachName", required = false) String coachName) {
+	public ResponseEntity<List<Team>> getAllTeams(
+	    @RequestParam(value = "teamName", required = false) String teamName,
+	    @RequestParam(value = "country", required = false) String country,
+	    @RequestParam(value = "coachName", required = false) String coachName,
+	    @RequestParam(value = "teamValueMin", required = false) BigDecimal teamValueMin,
+	    @RequestParam(value = "teamValueMax", required = false) BigDecimal teamValueMax,
+	    @RequestParam(value = "createdAtFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdAtFrom,
+	    @RequestParam(value = "createdAtTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdAtTo,
+	    @RequestParam(value = "updatedAtFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime updatedAtFrom,
+	    @RequestParam(value = "updatedAtTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime updatedAtTo) {
 
-		List<Team> teams = teamService.getAllTeams(teamName, country, coachName);
-		return ResponseEntity.ok(teams);
+	    List<Team> teams = teamService.getTeamsByCriteria(
+	        teamName, country, coachName, 
+	        teamValueMin, teamValueMax, 
+	        createdAtFrom, createdAtTo, 
+	        updatedAtFrom, updatedAtTo
+	    );
+	    return ResponseEntity.ok(teams);
 	}
+
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Team> getTeamById(@PathVariable Integer id) {
