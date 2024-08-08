@@ -1,4 +1,17 @@
 <h2>Lista de Times</h2>
+
+<!-- Formulário de Pesquisa -->
+<div class="search-form">
+  <h2>Filtrar Times</h2>
+  <form (ngSubmit)="searchTeams()">
+    <input type="text" placeholder="Nome do Time" [(ngModel)]="teamName" name="teamName">
+    <input type="text" placeholder="País" [(ngModel)]="country" name="country">
+    <input type="text" placeholder="Técnico" [(ngModel)]="coachName" name="coachName">
+    <button type="submit" class="form-button">Buscar</button>
+  </form>
+</div>
+
+<!-- Lista de Times -->
 <table>
   <thead>
     <tr>
