@@ -13,6 +13,12 @@ export class TeamsListComponent implements OnInit {
   teamName: string = '';
   country: string = '';
   coachName: string = '';
+  teamValueMin?: number;
+  teamValueMax?: number;
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  updatedAtFrom?: string;
+  updatedAtTo?: string;
 
   constructor(private teamService: TeamService) { }
 
@@ -26,9 +32,20 @@ export class TeamsListComponent implements OnInit {
     });
   }
 
-  searchTeams(): void {
-    this.teamService.searchTeams(this.teamName, this.country, this.coachName).subscribe(data => {
-      this.teams = data;
+  searchTeams() {
+    this.teamService.getFilteredTeams(
+      this.teamName,
+      this.country,
+      this.coachName,
+      this.teamValueMin,
+      this.teamValueMax,
+      this.createdAtFrom,
+      this.createdAtTo,
+      this.updatedAtFrom,
+      this.updatedAtTo
+    ).subscribe(teams => {
+      this.teams = teams;
     });
   }
+
 }

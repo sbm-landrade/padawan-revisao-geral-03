@@ -24,4 +24,30 @@ export class TeamService {
 
     return this.http.get<Team[]>(this.apiUrl, { params });
   }
+
+  getFilteredTeams(
+    teamName?: string,
+    country?: string,
+    coachName?: string,
+    teamValueMin?: number,
+    teamValueMax?: number,
+    createdAtFrom?: string,
+    createdAtTo?: string,
+    updatedAtFrom?: string,
+    updatedAtTo?: string
+  ): Observable<Team[]> {
+    let params = new HttpParams();
+
+    if (teamName) params = params.set('teamName', teamName);
+    if (country) params = params.set('country', country);
+    if (coachName) params = params.set('coachName', coachName);
+    if (teamValueMin) params = params.set('teamValueMin', teamValueMin.toString());
+    if (teamValueMax) params = params.set('teamValueMax', teamValueMax.toString());
+    if (createdAtFrom) params = params.set('createdAtFrom', createdAtFrom);
+    if (createdAtTo) params = params.set('createdAtTo', createdAtTo);
+    if (updatedAtFrom) params = params.set('updatedAtFrom', updatedAtFrom);
+    if (updatedAtTo) params = params.set('updatedAtTo', updatedAtTo);
+
+    return this.http.get<Team[]>(this.apiUrl, { params });
+  }
 }
