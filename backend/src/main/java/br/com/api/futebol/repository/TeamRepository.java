@@ -62,7 +62,7 @@ public class TeamRepository {
 		List<Team> teams = new ArrayList<>();
 		String sql = "SELECT * FROM teams";
 
-		System.out.println("Iniciando a consulta ao banco de dados");
+		//System.out.println("Iniciando a consulta ao banco de dados");
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(sql);
@@ -71,13 +71,13 @@ public class TeamRepository {
 			while (resultSet.next()) {
 				Team team = mapRow(resultSet);
 				teams.add(team);
-				System.out.println("Time adicionado: " + team.getTeamName());
+				//System.out.println("Time adicionado: " + team.getTeamName());
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao acessar o banco de dados: " + e.getMessage());
+			//System.out.println("Erro ao acessar o banco de dados: " + e.getMessage());
 			e.printStackTrace();
 		}
-		 System.out.println("Consulta finalizada, total de times encontrados: " + teams.size());
+		 //System.out.println("Consulta finalizada, total de times encontrados: " + teams.size());
 		return teams;
 	}
 
