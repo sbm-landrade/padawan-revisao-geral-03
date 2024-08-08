@@ -55,6 +55,7 @@
         <th>Valor</th>
         <th>Criado em</th>
         <th>Atualizado em</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -65,7 +66,58 @@
         <td>{{ team.teamValue | currency }}</td>
         <td>{{ team.createdAt | date }}</td>
         <td>{{ team.updatedAt | date }}</td>
+        <td>
+          <button (click)="selectTeam(team)">Editar</button>
+        </td>
       </tr>
     </tbody>
   </table>
+</section>
+
+<!-- Formulário de Edição -->
+<section *ngIf="selectedTeam" class="edit-section">
+  <h2>Editar Time</h2>
+  <form (ngSubmit)="saveTeam()" class="edit-form">
+    <div class="form-group">
+      <label for="editTeamName">Nome do Time:</label>
+      <input id="editTeamName" type="text" [(ngModel)]="selectedTeam.teamName" name="teamName">
+    </div>
+    <div class="form-group">
+      <label for="editCountry">País:</label>
+      <input id="editCountry" type="text" [(ngModel)]="selectedTeam.country" name="country">
+    </div>
+    <div class="form-group">
+      <label for="editCoachName">Técnico:</label>
+      <input id="editCoachName" type="text" [(ngModel)]="selectedTeam.coachName" name="coachName">
+    </div>
+    <div class="form-group">
+      <label for="editTeamValue">Valor:</label>
+      <input id="editTeamValue" type="number" [(ngModel)]="selectedTeam.teamValue" name="teamValue">
+    </div>
+    <button type="submit" class="form-button">Salvar</button>
+    <button type="button" class="form-button" (click)="clearSelection()">Cancelar</button>
+  </form>
+</section>
+<!-- Formulário de Criação -->
+<section class="create-section">
+  <h2>Criar Novo Time</h2>
+  <form (ngSubmit)="createTeam()" class="create-form">
+    <div class="form-group">
+      <label for="createTeamName">Nome do Time:</label>
+      <input id="createTeamName" type="text" placeholder="Nome do Time" [(ngModel)]="newTeam.teamName" name="teamName">
+    </div>
+    <div class="form-group">
+      <label for="createCountry">País:</label>
+      <input id="createCountry" type="text" placeholder="País" [(ngModel)]="newTeam.country" name="country">
+    </div>
+    <div class="form-group">
+      <label for="createCoachName">Técnico:</label>
+      <input id="createCoachName" type="text" placeholder="Técnico" [(ngModel)]="newTeam.coachName" name="coachName">
+    </div>
+    <div class="form-group">
+      <label for="createTeamValue">Valor:</label>
+      <input id="createTeamValue" type="number" placeholder="Valor" [(ngModel)]="newTeam.teamValue" name="teamValue">
+    </div>
+    <button type="submit" class="form-button">Criar</button>
+  </form>
 </section>

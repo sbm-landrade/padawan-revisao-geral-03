@@ -10,6 +10,10 @@ import { Team } from '../models/team';
 export class TeamsListComponent implements OnInit {
 
   teams: Team[] = [];
+  selectedTeam: Team | null = null;
+  newTeam: Partial<Team> = {
+
+  };
   teamName: string = '';
   country: string = '';
   coachName: string = '';
@@ -48,4 +52,49 @@ export class TeamsListComponent implements OnInit {
     });
   }
 
+  createTeam() {
+    if (this.newTeam.teamName && this.newTeam.country && this.newTeam.coachName && this.newTeam.teamValue) {
+      this.teamService.createTeam(this.newTeam as Team).subscribe(() => {
+        this.searchTeams(); // Atualiza a lista após criação
+        this.newTeam = { teamName: '', country: '', coachName: '', teamValue: 0 }; // Limpa o formulário
+      });
+    } else {
+      alert('Por favor, preencha todos os campos.');
+    }
+  }
+
+  onUpdate(team: Team) {
+    if (team.id != null) {
+      this.teamService.updateTeam(team).subscribe(() => {
+        this.searchTeams(); // Atualiza a lista após atualização
+        this.selectedTeam = null; // Desmarca o time selecionado
+      });
+    }
+  }
+
+  onDelete(id: number) {
+    this.teamService.deleteTeam(id).subscribe(() => {
+      this.searchTeams(); // Atualiza a lista após exclusão
+    });
+  }
+
+  selectTeam(team: Team) {
+    this.selectedTeam = { ...team };
+  }
+
+  clearSelection() {
+    this.selectedTeam = null;
+  }
+
+  saveTeam(): void {
+    if (this.selectedTeam) {
+      if (this.selectedTeam.id) {
+        // Atualizar equipe existente
+        this.onUpdate(this.selectedTeam);
+      } else {
+        // Criar nova equipe
+        this.createTeam();
+      }
+    }
+  }
 }
