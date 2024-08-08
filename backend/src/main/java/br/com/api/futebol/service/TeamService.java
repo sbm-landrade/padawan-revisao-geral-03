@@ -15,8 +15,8 @@ public class TeamService {
 	@Autowired
     private TeamRepository teamRepository;
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
+    public List<Team> getAllTeams(String teamName, String country, String coachName) {
+        return teamRepository.findTeamsByCriteria(teamName, country, coachName);    
     }
 
     public Optional<Team> getTeamById(Integer id) {
