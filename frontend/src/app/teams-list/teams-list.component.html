@@ -1,5 +1,3 @@
-<h2>Lista de Times</h2>
-
 <!-- Formulário de Pesquisa -->
 <section class="search-section">
   <h2>Filtrar Times</h2>
@@ -68,6 +66,7 @@
         <td>{{ team.updatedAt | date }}</td>
         <td>
           <button (click)="selectTeam(team)">Editar</button>
+          <button (click)="onDelete(team.id)">Excluir</button>
         </td>
       </tr>
     </tbody>
@@ -98,6 +97,7 @@
     <button type="button" class="form-button" (click)="clearSelection()">Cancelar</button>
   </form>
 </section>
+
 <!-- Formulário de Criação -->
 <section class="create-section">
   <h2>Criar Novo Time</h2>
