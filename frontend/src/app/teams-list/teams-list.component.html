@@ -61,9 +61,9 @@
         <td>{{ team.teamName }}</td>
         <td>{{ team.country }}</td>
         <td>{{ team.coachName }}</td>
-        <td>{{ team.teamValue | currency }}</td>
-        <td>{{ team.createdAt | date }}</td>
-        <td>{{ team.updatedAt | date }}</td>
+        <td>R$ {{ formatCurrency(team.teamValue) }}</td>
+        <td>{{ team.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ team.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
         <td>
           <button (click)="selectTeam(team)">Editar</button>
           <button (click)="onDelete(team.id)">Excluir</button>

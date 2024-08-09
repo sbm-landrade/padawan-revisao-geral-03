@@ -64,8 +64,10 @@ export class TeamsListComponent implements OnInit {
   }
 
   onUpdate(team: Team) {
+    console.log('Atualizando team:', team); // Verifica os dados do time antes de enviar
     if (team.id != null) {
       this.teamService.updateTeam(team).subscribe(() => {
+        console.log('Atualizado sucesso:', Response);
         this.searchTeams(); // Atualiza a lista após atualização
         this.selectedTeam = null; // Desmarca o time selecionado
       });
@@ -96,5 +98,10 @@ export class TeamsListComponent implements OnInit {
         this.createTeam();
       }
     }
+  }
+
+  formatCurrency(value: number): string {
+    const formattedValue = value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return formattedValue.replace(',', '.'); // Substitui vírgula por ponto
   }
 }
