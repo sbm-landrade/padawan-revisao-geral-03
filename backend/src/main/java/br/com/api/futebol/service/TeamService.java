@@ -1,5 +1,7 @@
 package br.com.api.futebol.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +17,9 @@ public class TeamService {
 	@Autowired
     private TeamRepository teamRepository;
 
-    public List<Team> getAllTeams() {
-        return teamRepository.findAll();
-    }
+	public List<Team> getTeamsByCriteria(String teamName, String country, String coachName, BigDecimal teamValueMin, BigDecimal teamValueMax, LocalDateTime createdAtFrom, LocalDateTime createdAtTo, LocalDateTime updatedAtFrom, LocalDateTime updatedAtTo) {
+	    return teamRepository.findTeamsByCriteria(teamName, country, coachName, teamValueMin, teamValueMax, createdAtFrom, createdAtTo, updatedAtFrom, updatedAtTo);
+	}
 
     public Optional<Team> getTeamById(Integer id) {
         return teamRepository.findById(id);

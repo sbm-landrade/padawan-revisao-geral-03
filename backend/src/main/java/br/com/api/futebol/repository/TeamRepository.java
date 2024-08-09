@@ -1,17 +1,22 @@
 package br.com.api.futebol.repository;
 
-import javax.sql.DataSource;
-
-import br.com.api.futebol.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import br.com.api.futebol.model.Team;
 
 @Repository
 public class TeamRepository {
@@ -59,27 +64,102 @@ public class TeamRepository {
 	}
 
 	public List<Team> findAll() {
-		List<Team> teams = new ArrayList<>();
-		String sql = "SELECT * FROM teams";
-
-		//System.out.println("Iniciando a consulta ao banco de dados");
-		
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(sql);
-				ResultSet resultSet = statement.executeQuery()) {
-
-			while (resultSet.next()) {
-				Team team = mapRow(resultSet);
-				teams.add(team);
-				//System.out.println("Time adicionado: " + team.getTeamName());
-			}
-		} catch (SQLException e) {
-			//System.out.println("Erro ao acessar o banco de dados: " + e.getMessage());
-			e.printStackTrace();
-		}
-		 //System.out.println("Consulta finalizada, total de times encontrados: " + teams.size());
-		return teams;
+		return findTeamsByCriteria(null, null, null, null, null, null, null, null, null);
 	}
+
+	public List<Team> findTeamsByCriteria(String teamName, String country, String coachName, BigDecimal teamValueMin, BigDecimal teamValueMax, LocalDateTime createdAtFrom, LocalDateTime createdAtTo, LocalDateTime updatedAtFrom, LocalDateTime updatedAtTo) {
+	    List<Team> teams = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder("SELECT * FROM teams WHERE 1=1");
+
+	    if (teamName != null && !teamName.isEmpty()) {
+	        sql.append(" AND team_name LIKE ?");
+	    }
+
+	    if (country != null && !country.isEmpty()) {
+	        sql.append(" AND country LIKE ?");
+	    }
+
+	    if (coachName != null && !coachName.isEmpty()) {
+	        sql.append(" AND coach_name LIKE ?");
+	    }
+
+	    if (teamValueMin != null) {
+	        sql.append(" AND team_value >= ?");
+	    }
+
+	    if (teamValueMax != null) {
+	        sql.append(" AND team_value <= ?");
+	    }
+
+	    if (createdAtFrom != null) {
+	        sql.append(" AND created_at >= ?");
+	    }
+
+	    if (createdAtTo != null) {
+	        sql.append(" AND created_at <= ?");
+	    }
+
+	    if (updatedAtFrom != null) {
+	        sql.append(" AND updated_at >= ?");
+	    }
+
+	    if (updatedAtTo != null) {
+	        sql.append(" AND updated_at <= ?");
+	    }
+
+	    try (Connection connection = dataSource.getConnection();
+	         PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+
+	        int index = 1;
+
+	        if (teamName != null && !teamName.isEmpty()) {
+	            statement.setString(index++, "%" + teamName + "%");
+	        }
+
+	        if (country != null && !country.isEmpty()) {
+	            statement.setString(index++, "%" + country + "%");
+	        }
+
+	        if (coachName != null && !coachName.isEmpty()) {
+	            statement.setString(index++, "%" + coachName + "%");
+	        }
+
+	        if (teamValueMin != null) {
+	            statement.setBigDecimal(index++, teamValueMin);
+	        }
+
+	        if (teamValueMax != null) {
+	            statement.setBigDecimal(index++, teamValueMax);
+	        }
+
+	        if (createdAtFrom != null) {
+	            statement.setObject(index++, createdAtFrom);
+	        }
+
+	        if (createdAtTo != null) {
+	            statement.setObject(index++, createdAtTo);
+	        }
+
+	        if (updatedAtFrom != null) {
+	            statement.setObject(index++, updatedAtFrom);
+	        }
+
+	        if (updatedAtTo != null) {
+	            statement.setObject(index++, updatedAtTo);
+	        }
+
+	        try (ResultSet resultSet = statement.executeQuery()) {
+	            while (resultSet.next()) {
+	                Team team = mapRow(resultSet);
+	                teams.add(team);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return teams;
+	}
+
 
 	public Optional<Team> findById(Integer id) {
 		String sql = "SELECT * FROM teams WHERE id = ?";
@@ -121,4 +201,5 @@ public class TeamRepository {
 		team.setUpdatedAt(resultSet.getObject("updated_at", LocalDateTime.class));
 		return team;
 	}
+
 }
